@@ -13,18 +13,20 @@ if ($conn->connect_error) {
 <body>
 <?php
 
-$sql = "SELECT * FROM CyberSecurityBlog.Blogs INNER JOIN CyberSecurityBlog.Users ON Users.ID=blogs.userID WHERE blogs.ID= ?";
+$sql = "SELECT CyberSecurityBlog.Users.*,CyberSecurityBlog.roles.name As RoleName FROM CyberSecurityBlog.users INNER JOIN CyberSecurityBlog.roles ON users.RoleID = roles.ID";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param('s', $_GET['id']);
+
 
 if ($stmt->execute()) {
     $result = $stmt->get_result();
     while($row = $result->fetch_assoc()) {
-        echo '<h1 style="margin:25px">'.htmlspecialchars($row['Title']).'</h1>';
-        echo '<p style="margin:25px">'.htmlspecialchars($row['Content']).'</p>';
-        echo '<p style="margin:25px">Created By: '.htmlspecialchars($row['Name'])  .'</p>';
-        echo '<p style="margin:25px">Date Created: '.htmlspecialchars($row['Timestamp']).'</p>';
-        Echo '<a href="ViewAll.php">return to blog </a>';
+
+        echo '<p style="margin:25px">Username '.htmlspecialchars($row['Username'])  .'</p>';
+        echo '<p style="margin:25px">Name '.htmlspecialchars($row['Name']).'</p>';
+        echo '<p style="margin:25px">Password'.htmlspecialchars($row['Password']).'</p>';
+        echo '<p style="margin:25px">Role '.htmlspecialchars($row['RoleName']).'</p>';
+        echo '<p style="margin:25px">Email '.htmlspecialchars($row['Email']).'</p>';
+
     }
 }
 ?>
