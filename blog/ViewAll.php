@@ -13,7 +13,7 @@ if ($conn->connect_error) {
 <body>
 <?php
 
-$sql = "SELECT CyberSecurityBlog.Blogs.*, CyberSecurityBlog.Users.Name FROM CyberSecurityBlog.Blogs INNER JOIN CyberSecurityBlog.Users ON Users.ID=blogs.userID ";
+$sql = "SELECT CyberSecurityBlog.Blogs.*, CyberSecurityBlog.Users.Name FROM CyberSecurityBlog.Blogs INNER JOIN CyberSecurityBlog.Users ON Users.ID=blogs.userID WHERE CyberSecurityBlog.Blogs.Enabled = 1";
 $stmt = $conn->prepare($sql);
 
 

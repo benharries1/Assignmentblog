@@ -13,18 +13,29 @@ if ($conn->connect_error) {
 <body>
 <?php
 
-$sql = "SELECT * FROM CyberSecurityBlog.Blogs INNER JOIN CyberSecurityBlog.Users ON Users.ID=blogs.userID WHERE blogs.ID= ?";
+$sql = "SELECT CyberSecurityBlog.Blogs.*, CyberSecurityBlog.Users.Name FROM CyberSecurityBlog.Blogs INNER JOIN CyberSecurityBlog.Users ON Users.ID=blogs.userID WHERE blogs.ID= ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param('s', $_GET['id']);
 
 if ($stmt->execute()) {
     $result = $stmt->get_result();
     while($row = $result->fetch_assoc()) {
-        echo '<h1 style="margin:25px">'.htmlspecialchars($row['Title']).'</h1>';
-        echo '<p style="margin:25px">'.htmlspecialchars($row['Content']).'</p>';
-        echo '<p style="margin:25px">Created By: '.htmlspecialchars($row['Name'])  .'</p>';
-        echo '<p style="margin:25px">Date Created: '.htmlspecialchars($row['Timestamp']).'</p>';
-        Echo '<a href="ViewAll.php">return to blog </a>';
+        if ($row['Enabled'])
+        {
+            echo $row['Enabled'];
+            echo '<h1 style="margin:25px">'.htmlspecialchars($row['Title']).'</h1>';
+            echo '<p style="margin:25px">'.htmlspecialchars($row['Content']).'</p>';
+            echo '<p style="margin:25px">Created By: '.htmlspecialchars($row['Name'])  .'</p>';
+            echo '<p style="margin:25px">Date Created: '.htmlspecialchars($row['Timestamp']).'</p>';
+            Echo '<a href="ViewAll.php">return to blog </a>';
+            Echo '<a href="EditBlog.php?id=' . $_GET['id'] . '">edit blog </a>';
+        }
+        else
+        {
+            echo '<p>Blog has been deleted</p>';
+
+        }
+
     }
 }
 ?>

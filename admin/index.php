@@ -26,7 +26,7 @@ if ($stmt->execute()) {
         echo '<p style="margin:25px">Password'.htmlspecialchars($row['Password']).'</p>';
         echo '<p style="margin:25px">Role '.htmlspecialchars($row['RoleName']).'</p>';
         echo '<p style="margin:25px">Email '.htmlspecialchars($row['Email']).'</p>';
-
+        Echo '<a href="ViewUser.php?id=' .$row['ID'] .'">View User</a>';
     }
 }
 ?>
