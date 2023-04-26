@@ -16,7 +16,10 @@ if (isset($_SESSION['username'])) {
     header("location: ..\index.php");
 }
 ?>
-<html lang="en">
+<html>
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+</head>
 <body>
 <form action="register.php" method="post">
     <div class="mb-3">
@@ -47,7 +50,8 @@ if(isset($_POST['username'])) {
     $sql = "INSERT INTO CyberSecurityBlog.Users ( `username`, `name`,  `email`, `password`) VALUES (?,?,?,?)";
     $stmt = $conn->prepare($sql);
     //Binds the parameters into the SQL query.
-    $stmt->bind_param('ssss', $_POST['username'], $_POST['name'],  $_POST['email'], $_POST['password']);
+    $hashPassword = sha1($_POST['password']);
+    $stmt->bind_param('ssss', $_POST['username'], $_POST['name'],  $_POST['email'], $hashPassword);
     //If the SQL statement executes successfully, the user will be registered and will be greeted with the following.
     if ($stmt->execute()) {
         echo $_POST['username'] . ' Registered Successfully!';
@@ -58,6 +62,7 @@ if(isset($_POST['username'])) {
     }
 }
 ?>
-
+</body>
+</html>
 
 
