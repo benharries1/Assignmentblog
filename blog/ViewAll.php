@@ -18,33 +18,36 @@ if ($conn->connect_error) {
 <?php
 include '../navbar.php';
 
-$sql = "SELECT CyberSecurityBlog.Blogs.*, CyberSecurityBlog.Users.Name FROM CyberSecurityBlog.Blogs INNER JOIN CyberSecurityBlog.Users ON Users.ID=blogs.userID WHERE CyberSecurityBlog.Blogs.Enabled = 1";
+$sql = "SELECT CyberSecurityBlog.Blogs.*, CyberSecurityBlog.Users.Name FROM CyberSecurityBlog.Blogs INNER JOIN CyberSecurityBlog.Users ON Users.ID=blogs.userID";
 $stmt = $conn->prepare($sql);
 
 
 if ($stmt->execute()) {
     $result = $stmt->get_result();
     echo '<div class="container py-5">';
-    echo '<div class="row row-cols-1 row-cols-md-3 g-4">';
+    echo '<div class="row">';
+        echo '<a class= "btn btn-primary btn-sm float-end" href="Createblog.php">Create Post</a>';
+    echo '</div>';
+    echo '<div class="row row-cols-1 row-cols-md-3 g-4 py-5">';
 
     while($row = $result->fetch_assoc()) {
 
-        echo '<div class="col">';
+        if($row['Enabled'] or $_SESSION['RoleID']==3)
+        {
+            echo '<div class="col">';
             echo '<div class="card h-100">';
-                echo '<div class="card-header">'.htmlspecialchars($row['Title']).'</div>';
-                echo '<div class="card-body">';
-                    echo '<p class="card-text">'. substr($row['Content'],0,100) .'...</p>';
+            echo '<div class="card-header ' . ($row['Enabled'] ? '' : 'text-bg-danger') . '" >'.htmlspecialchars($row['Title']).'</div>';
+            echo '<div class="card-body">';
+            echo '<p class="card-text">'. substr($row['Content'],0,100) .'...</p>';
 
-                echo '</div>';
-                echo '<div class="card-footer">';
-                    echo '<small class="text-body-secondary">Created By: '.htmlspecialchars($row['Name'])  .'on ' .htmlspecialchars($row['Timestamp']). '</small>';
-                    echo '<a class="btn btn-primary btn-sm float-end" href="ViewBlog.php?id='.htmlspecialchars($row['ID']).'">Read post</a>';
-                echo '</div>';
             echo '</div>';
-        echo '</div>';
-
-
-
+            echo '<div class="card-footer">';
+            echo '<small class="text-body-secondary">Created By: '.htmlspecialchars($row['Name'])  .'on ' .htmlspecialchars($row['Timestamp']). '</small>';
+            echo '<a class="btn btn-primary btn-sm float-end" href="ViewBlog.php?id='.htmlspecialchars($row['ID']).'">Read post</a>';
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
+        }
     }
 
     echo '</div>';

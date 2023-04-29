@@ -11,7 +11,6 @@ if ($conn->connect_error) {
     die("Connection Failed: " . $conn->connect_error);
 }
 session_start();
-echo $_SESSION['UserID'];
 //If the session has not been set (user not logged in), then the user is redirected home
 //if(!isset($_SESSION['username'])){
 //    header("location: ..\index.php");
@@ -22,20 +21,37 @@ echo $_SESSION['UserID'];
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 </head>
 <body>
-<form action="CreateBlog.php" method="post">
-    <div class="mb-3">
-        <label for="title" class="form-label">title</label>
-        <input type="text" class="form-control" id="title" name="title">
+<?php
+include '../navbar.php';
+?>
+
+<div class="container container py-5">
+
+    <div class="row align-items-center">
+        <div class="col col-2"></div>
+        <div class="col col-8 align-self-center">
+
+            <div class="card">
+                <div class="card-header">
+                    Create Blog Post
+                </div>
+                <div class="card-body">
+                <form action="CreateBlog.php" method="post">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="title" name="title">
+                    </div>
+                    <div class="mb-3">
+                        <label for="content" class="form-label">Content</label>
+                        <textarea class="form-control" id="content" name="content"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="mb-3">
-        <label for="content" class="form-label">content</label>
-        <input type="text" class="form-control" id="content" name="content">
-    </div>
-
-
-
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+</div>
 <?php
 
 //Checks to see if the username is set#

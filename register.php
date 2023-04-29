@@ -80,7 +80,10 @@ if(isset($_POST['username'])) {
     $stmt->bind_param('ssss', $_POST['username'], $_POST['name'],  $_POST['email'], $hashPassword);
     //If the SQL statement executes successfully, the user will be registered and will be greeted with the following.
     if ($stmt->execute()) {
+        echo '<div class="alert alert-success" role="alert">';
         echo $_POST['username'] . ' Registered Successfully!';
+        echo '</div>';
+
     }
     else
     {

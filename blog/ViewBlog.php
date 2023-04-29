@@ -28,7 +28,17 @@ if ($stmt->execute()) {
     echo '<div class="container py-5">';
     echo '<div class="row row-cols-md-9 g-4">';
     while($row = $result->fetch_assoc()) {
-        if ($row['Enabled'])
+
+        if (!$row['Enabled'])
+        {
+            echo '<div class="alert alert-danger" role="alert">';
+            echo 'Blog has been deleted';
+            echo '</div>';
+        }
+
+
+
+        if ($row['Enabled'] or $_SESSION['RoleID']==3)
         {
 
             echo '<div class="col">';
@@ -48,22 +58,6 @@ if ($stmt->execute()) {
             echo '</div>';
             echo '</div>';
 
-
-
-//            echo '<h1 style="margin:25px">'.htmlspecialchars($row['Title']).'</h1>';
-//            echo '<p style="margin:25px">'.htmlspecialchars($row['Content']).'</p>';
-//            echo '<p style="margin:25px">Created By: '.htmlspecialchars($row['Name'])  .'</p>';
-//            echo '<p style="margin:25px">Date Created: '.htmlspecialchars($row['Timestamp']).'</p>';
-//            Echo '<a href="ViewAll.php">return to blog </a>';
-//            if($_SESSION['RoleID'] == 3 or $_SESSION['UserID'] == $row['UserID'])
-//            {
-//                Echo '<a href="EditBlog.php?id=' . $_GET['id'] . '">edit blog </a>';
-//            }
-
-        }
-        else
-        {
-            echo '<p>Blog has been deleted</p>';
 
         }
     }

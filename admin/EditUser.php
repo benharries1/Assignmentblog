@@ -22,6 +22,23 @@ session_start();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 </head>
     <body>
+
+    <?php
+    include '../navbar.php';
+    ?>
+
+    <div class="container container py-5">
+
+        <div class="row align-items-center">
+            <div class="col col-4"></div>
+            <div class="col col-4 align-self-center">
+
+                <div class="card">
+                    <div class="card-header">
+                        Edit User
+                    </div>
+                    <div class="card-body">
+
 <?php
 if($_SESSION['RoleID'] == 3 ) {
 
@@ -48,7 +65,7 @@ if($_SESSION['RoleID'] == 3 ) {
             echo '</div>';
             echo '<div class="mb-3">';
             echo '<label for="Password" class="form-label">password</label>';
-            echo '<input type="text" class="form-control" id="Password" name="Password" value="' . htmlspecialchars($row['Password']) . '">';
+            echo '<input type="password" class="form-control" id="Password" name="Password" value="">';
             echo '</div>';
             echo '<div class="mb-3">';
             echo '<label for="RoleID" class="form-label">RoleID</label>';
@@ -60,9 +77,9 @@ if($_SESSION['RoleID'] == 3 ) {
             echo '</div>';
             echo '<div class="mb-3">';
             echo '<label for="Enabled" class="form-label">Enabled</label>';
-            echo '<input type="text" class="form-control" id="Enabled" name="Enabled" value="' . htmlspecialchars($row['Enabled']) . '">';
+            echo '<input type="checkbox" name="Enabled" ' . ($row['Enabled']==1 ? 'checked' : '') . '/>';
             echo '</div>';
-            echo '<button type="submit" class="btn btn-primary">Submit</button>';
+            echo '<button type="submit" class="d-grid btn btn-primary mx-auto">Submit</button>';
             echo '</form>';
 
         };
@@ -71,16 +88,29 @@ if($_SESSION['RoleID'] == 3 ) {
 
 
 //Checks to see if the username is set#
-    if (isset($_POST['Username']) & isset($_POST['Name']) & isset($_POST['Password']) & isset($_POST['Email']) & isset($_POST['RoleID']) & isset($_POST['Password']) & isset($_POST['Enabled'])) {
+    if (isset($_POST['Username']) & isset($_POST['Name']) & isset($_POST['Password']) & isset($_POST['Email']) & isset($_POST['RoleID']) & isset($_POST['Password'])) {
+
+        $IsEnabled = isset($_POST['Enabled']);
+
         //Inserts the user details and password into the table
-        $sql = "UPDATE CyberSecurityBlog.Users set Username=?, Name=?, RoleID=?, Email=?, Password=?,Enabled=? WHERE id = ?";
-
-        $stmt = $conn->prepare($sql);
-        //Binds the parameters into the SQL query.
 
 
-        $hashPassword = sha1($_POST['Password']);
-        $stmt->bind_param('sssssss', $_POST['Username'], $_POST['Name'], $_POST['RoleID'], $_POST['Email'], $hashPassword, $_POST['Enabled'], $_POST['ID']);
+        if($_POST['Password'] !="")
+        {
+            $sql = "UPDATE CyberSecurityBlog.Users set Username=?, Name=?, RoleID=?, Email=?, Password=?,Enabled=? WHERE id = ?";
+            $stmt = $conn->prepare($sql);
+            $hashPassword = sha1($_POST['Password']);
+            $stmt->bind_param('sssssss', $_POST['Username'], $_POST['Name'], $_POST['RoleID'], $_POST['Email'], $hashPassword, $IsEnabled, $_POST['ID']);
+        }
+        else
+        {
+            $sql = "UPDATE CyberSecurityBlog.Users set Username=?, Name=?, RoleID=?, Email=?, Enabled=? WHERE id = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param('ssssss', $_POST['Username'], $_POST['Name'], $_POST['RoleID'], $_POST['Email'], $IsEnabled, $_POST['ID']);
+        }
+
+
+
         //If the SQL statement executes successfully, the user will be registered and will be greeted with the following.
 
         if ($stmt->execute()) {
@@ -95,6 +125,13 @@ else
     Echo 'You have not got permission to do this';
 }
 ?>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     </body>
 </html>
