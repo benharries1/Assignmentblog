@@ -2,8 +2,8 @@
 session_start();
 //Provide the username and the server name of the SQL database
 $server_name = 'localhost';
-$username = 'root';
-$password = '';
+$username = 'Databaseadmin';
+$password = 'Astrongpassword1';
 //Establish a connection with the SQL database
 $conn = new mysqli($server_name, $username, $password);
 

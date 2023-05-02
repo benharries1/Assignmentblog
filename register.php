@@ -2,8 +2,8 @@
 
 //Provide the username and the server name of the SQL database
 $server_name = 'localhost';
-$username = 'root';
-$password = '';
+$username = 'Databaseadmin';
+$password = 'Astrongpassword1';
 //Establish a connection with the SQL database
 $conn = new mysqli($server_name, $username, $password);
 
@@ -23,6 +23,37 @@ if (isset($_SESSION['username'])) {
 <body>
 
 <div class="container container py-5">
+
+    <?php
+    $userNameExists = false;
+    //Checks to see if the username is set
+    if(isset($_POST['username'])) {
+
+
+        //First check is username exists
+        $sql = "SELECT * FROM CyberSecurityBlog.Users Where Username = ?";
+
+        $stmt = $conn->prepare($sql);
+
+        $stmt->bind_param('s', $_POST['username']);
+
+        if ($stmt->execute()) {
+            $result = $stmt->get_result();
+            while($row = $result->fetch_assoc()) {
+                $userNameExists=true;
+            }
+
+            if($userNameExists)
+            {
+                echo '<div class="alert alert-danger" role="alert">';
+                echo 'This username already exists';
+                echo '</div>';
+            }
+
+        }
+    }
+    ?>
+
 
     <div class="row align-items-center">
         <div class="col col-4"></div>
@@ -72,23 +103,32 @@ if (isset($_SESSION['username'])) {
 //Checks to see if the username is set
 if(isset($_POST['username'])) {
 
-    //Inserts the user details and password into the table
-    $sql = "INSERT INTO CyberSecurityBlog.Users ( `username`, `name`,  `email`, `password`) VALUES (?,?,?,?)";
-    $stmt = $conn->prepare($sql);
-    //Binds the parameters into the SQL query.
-    $hashPassword = sha1($_POST['password']);
-    $stmt->bind_param('ssss', $_POST['username'], $_POST['name'],  $_POST['email'], $hashPassword);
-    //If the SQL statement executes successfully, the user will be registered and will be greeted with the following.
-    if ($stmt->execute()) {
-        echo '<div class="alert alert-success" role="alert">';
-        echo $_POST['username'] . ' Registered Successfully!';
-        echo '</div>';
+
+    if(!$userNameExists)
+    {
+
+        //Inserts the user details and password into the table
+        $sql = "INSERT INTO CyberSecurityBlog.Users ( `username`, `name`,  `email`, `password`) VALUES (?,?,?,?)";
+        $stmt = $conn->prepare($sql);
+        //Binds the parameters into the SQL query.
+        $hashPassword = sha1($_POST['password']);
+        $stmt->bind_param('ssss', $_POST['username'], $_POST['name'],  $_POST['email'], $hashPassword);
+        //If the SQL statement executes successfully, the user will be registered and will be greeted with the following.
+        if ($stmt->execute()) {
+            echo '<div class="alert alert-success" role="alert">';
+            echo $_POST['username'] . ' Registered Successfully!';
+            echo '</div>';
+
+        }
+        else
+        {
+            echo 'Registration failed. Please try again, if this continues, please contact an administrator.';
+        }
+
 
     }
-    else
-    {
-        echo 'Registration failed. Please try again, if this continues, please contact an administrator.';
-    }
+
+
 }
 ?>
 </body>

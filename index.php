@@ -1,7 +1,7 @@
 <?php
 //provide the username and the server name of the SQL database
 $server_name ='localhost' ;
-$username = 'root';
+$username = 'Databaseadmin';
 $password ='';
 //Establish a connection with the SQL database
 $conn = new mysqli($server_name, $username, $password);
